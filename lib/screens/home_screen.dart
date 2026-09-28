@@ -17,18 +17,20 @@ class _HomeScreenState extends State<HomeScreen> {
   late final List<DayEntry> days;
   late int selectedIndex;
   final stripController = ScrollController();
+  final answerController = TextEditingController();
   double stripWidth = 0;
 
   @override
   void initState() {
     super.initState();
     days = buildMockDays();
-    selectedIndex = 10; // mock 데이터 기준 중간(오늘)
+    selectedIndex = 10;
   }
 
   @override
   void dispose() {
     stripController.dispose();
+    answerController.dispose();
     super.dispose();
   }
 
@@ -55,24 +57,28 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: kBg,
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            _profileCard(),
-            const SizedBox(height: 20),
-            _weekLabel(),
-            const SizedBox(height: 8),
-            _dateStrip(),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onHorizontalDragEnd: (details) {
-                final v = details.primaryVelocity ?? 0;
-                if (v < -200) _goTo(selectedIndex + 1);
-                if (v > 200) _goTo(selectedIndex - 1);
-              },
-              child: _dayContent(days[selectedIndex]),
-            ),
-          ],
+        child: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          behavior: HitTestBehavior.translucent,
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              _profileCard(),
+              const SizedBox(height: 20),
+              _weekLabel(),
+              const SizedBox(height: 8),
+              _dateStrip(),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onHorizontalDragEnd: (details) {
+                  final v = details.primaryVelocity ?? 0;
+                  if (v < -200) _goTo(selectedIndex + 1);
+                  if (v > 200) _goTo(selectedIndex - 1);
+                },
+                child: _dayContent(days[selectedIndex]),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -235,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 8),
         Text(entry.feedback, style: const TextStyle(color: kText, fontSize: 14, height: 1.6)),
         const SizedBox(height: 24),
-        SizedBox(width: double.infinity, child: _answerInput()),
+        _answerInput(),
         const SizedBox(height: 12),
         _otherAnswersLink(),
       ],
@@ -243,10 +249,23 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _answerInput() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(color: kSurfaceHigh, borderRadius: BorderRadius.circular(10)),
-      child: const Text('당신의 생각을 적어보세요', style: TextStyle(color: kTextFaint, fontSize: 13)),
+    return TextField(
+      controller: answerController,
+      minLines: 1,
+      maxLines: 6,
+      cursorColor: kAccent,
+      style: const TextStyle(color: kText, fontSize: 14),
+      decoration: InputDecoration(
+        hintText: '당신의 생각을 적어보세요',
+        hintStyle: const TextStyle(color: kTextFaint, fontSize: 13),
+        filled: true,
+        fillColor: kSurfaceHigh,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: BorderSide.none,
+        ),
+      ),
     );
   }
 
