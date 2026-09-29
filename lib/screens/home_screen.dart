@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../models/day_entry.dart';
 import '../data/mock_days.dart';
+import 'other_answers_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -270,13 +271,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _otherAnswersLink() {
-    return const Center(
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('다른 답변 보기', style: TextStyle(color: kTextDim, fontSize: 13)),
-          Icon(Icons.keyboard_arrow_down, color: kTextDim, size: 16),
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const OtherAnswersScreen()),
+        );
+      },
+      child: const Center(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('다른 답변 보기', style: TextStyle(color: kTextDim, fontSize: 13)),
+            Icon(Icons.keyboard_arrow_down, color: kTextDim, size: 16),
+          ],
+        ),
       ),
     );
   }
