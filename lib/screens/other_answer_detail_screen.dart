@@ -14,31 +14,55 @@ class OtherAnswerDetailScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            Row(
-              children: [
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.arrow_back_ios_new, color: kText, size: 18),
-                ),
-              ],
+            Align(
+              alignment: Alignment.topLeft,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: const Icon(Icons.arrow_back_ios_new, color: kText, size: 18),
+              ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const CircleAvatar(radius: 18, backgroundColor: kSurfaceHigh),
                 const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(answer.name, style: const TextStyle(color: kText, fontWeight: FontWeight.w600)),
+                    Text(answer.username, style: const TextStyle(color: kTextFaint, fontSize: 11)),
+                  ],
+                ),
+                const SizedBox(width: 14),
                 Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Text(answer.name, style: const TextStyle(color: kText, fontWeight: FontWeight.w600)),
-                      Text(answer.level, style: const TextStyle(color: kTextFaint, fontSize: 12)),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(3),
+                        child: LinearProgressIndicator(
+                          value: answer.levelProgress,
+                          minHeight: 5,
+                          backgroundColor: kSurfaceHigh,
+                          valueColor: const AlwaysStoppedAnimation(kAccent),
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(answer.level, style: const TextStyle(color: kTextFaint, fontSize: 11)),
+                          Text(answer.nextLevel, style: const TextStyle(color: kTextFaint, fontSize: 11)),
+                        ],
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 20),
+            Text(answer.message, style: const TextStyle(color: kText, fontSize: 15, fontWeight: FontWeight.w600, height: 1.5)),
+            const SizedBox(height: 10),
             ClipRRect(
               borderRadius: BorderRadius.circular(3),
               child: LinearProgressIndicator(
@@ -49,7 +73,10 @@ class OtherAnswerDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-            Text('${answer.score}점', style: const TextStyle(color: kTextFaint, fontSize: 11)),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text('${answer.score}점', style: const TextStyle(color: kTextFaint, fontSize: 11)),
+            ),
             const SizedBox(height: 20),
             Text('Q. ${answer.question}', style: const TextStyle(color: kText, fontSize: 14, height: 1.6)),
             const SizedBox(height: 10),
